@@ -40,33 +40,28 @@ export default function SummaryScreen() {
 
   if (!summary) return null;
   const unit = summary.settlement.unit;
+  const winner = summary.leaderboard.standings[0];
+  const completed = summary.game.status === "COMPLETED";
 
   return (
     <ScrollView style={styles.wrap} contentContainerStyle={{ paddingBottom: 40 }}>
-      <Text style={styles.title}>Final summary</Text>
+      <Text style={styles.title}>{completed ? "Game complete" : "Game summary"}</Text>
+      <View style={styles.card}>
+        <Text style={styles.name}>{summary.game.name || "Untitled game"}</Text>
+        <Text style={styles.meta}>
+          {summary.game.roomId} · {summary.validation.totalRounds} rounds · {summary.game.players.length} players
+        </Text>
+        {winner ? (
+          <Text style={styles.winner}>
+            Leader: {winner.playerName} · {formatSignedPoints(winner.netPoints)}
+          </Text>
+        ) : null}
+      </View>
+
       <Pressable style={styles.button} onPress={sharePdf} disabled={busy}>
-        <Text style={styles.buttonText}>{busy ? "Preparing PDF…" : "Download / share PDF"}</Text>
+        <Text style={styles.buttonText}>{busy ? "Preparing PDF…" : "Download PDF"}</Text>
       </Pressable>
-      <Text style={styles.section}>Round-by-round points</Text>
-      {summary.game.rounds.length === 0 ? (
-        <Text style={styles.meta}>No rounds recorded yet.</Text>
-      ) : (
-        summary.game.rounds.map((round) => (
-          <View key={round.id} style={styles.card}>
-            <Text style={styles.name}>
-              Round {round.roundNumber} · Winner {round.winnerName}
-            </Text>
-            {summary.game.players.map((player) => {
-              const points = round.playerScores.find((score) => score.playerId === player.id)?.points ?? 0;
-              return (
-                <Text key={player.id} style={styles.line}>
-                  {player.name}: {player.id === round.winnerId ? "Winner" : "Packed"} {formatSignedPoints(points)}
-                </Text>
-              );
-            })}
-          </View>
-        ))
-      )}
+
       <Text style={styles.section}>Standings</Text>
       {summary.leaderboard.standings.map((player) => (
         <View key={player.playerId} style={styles.card}>
@@ -78,13 +73,18 @@ export default function SummaryScreen() {
           </Text>
         </View>
       ))}
+
       <Text style={styles.section}>Settlement</Text>
-      {summary.settlement.transfers.map((transfer, index) => (
-        <Text key={index} style={styles.line}>
-          {transfer.payerName} → {transfer.receiverName}: {formatCurrency(transfer.amount, unit)}
-        </Text>
-      ))}
-      <Text style={styles.meta}>{summary.settlement.disclaimer}</Text>
+      {summary.settlement.transfers.length === 0 ? (
+        <Text style={styles.meta}>No transfers required.</Text>
+      ) : (
+        summary.settlement.transfers.map((transfer, index) => (
+          <Text key={index} style={styles.line}>
+            {transfer.payerName} → {transfer.receiverName}: {formatCurrency(transfer.amount, unit)}
+          </Text>
+        ))
+      )}
+      <Text style={styles.disclaimer}>{summary.settlement.disclaimer}</Text>
     </ScrollView>
   );
 }
@@ -92,11 +92,13 @@ export default function SummaryScreen() {
 const styles = StyleSheet.create({
   wrap: { flex: 1, padding: 16, backgroundColor: colors.cream },
   title: { fontSize: 28, fontWeight: "800", color: colors.forest, marginBottom: 12 },
-  button: { backgroundColor: colors.gold, borderRadius: 12, padding: 14, alignItems: "center", marginBottom: 16 },
+  button: { backgroundColor: colors.gold, borderRadius: 12, padding: 14, alignItems: "center", marginBottom: 8, marginTop: 4 },
   buttonText: { color: colors.forestDark, fontWeight: "800" },
   card: { backgroundColor: colors.white, borderRadius: 12, padding: 12, marginBottom: 8 },
   name: { fontWeight: "700", color: colors.ink },
-  section: { marginTop: 16, fontSize: 18, fontWeight: "700", color: colors.forest },
+  winner: { marginTop: 8, fontWeight: "700", color: colors.forest },
+  section: { marginTop: 16, marginBottom: 8, fontSize: 18, fontWeight: "700", color: colors.forest },
   line: { marginTop: 8, color: colors.ink },
-  meta: { marginTop: 16, color: colors.muted, fontSize: 12 }
+  meta: { marginTop: 4, color: colors.muted },
+  disclaimer: { marginTop: 16, color: colors.muted, fontSize: 12 }
 });

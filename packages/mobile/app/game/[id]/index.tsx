@@ -52,10 +52,30 @@ export default function GameScreen() {
           <Pressable
             style={styles.ghost}
             onPress={() =>
-              api.completeGame(game.id).then((result) => {
-                setGame(result.game);
-                router.push(`/game/${game.id}/summary`);
-              })
+              Alert.alert(
+                "Complete this game?",
+                "This finishes scoring. You can reopen later for corrections. After you confirm, you'll see a short summary and can download the PDF.",
+                [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Complete game",
+                    onPress: () => {
+                      void api
+                        .completeGame(game.id)
+                        .then((result) => {
+                          setGame(result.game);
+                          router.replace(`/game/${game.id}/summary`);
+                        })
+                        .catch((error) =>
+                          Alert.alert(
+                            "Unable to complete",
+                            error instanceof Error ? error.message : "Try again"
+                          )
+                        );
+                    }
+                  }
+                ]
+              )
             }
           >
             <Text style={styles.ghostText}>Complete game</Text>

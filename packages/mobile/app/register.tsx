@@ -1,7 +1,8 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, TextInput } from "react-native";
 import { api, setToken } from "../lib/api";
+import { KeyboardScreen } from "../lib/keyboard";
 import { colors } from "../lib/theme";
 
 export default function RegisterScreen() {
@@ -25,7 +26,7 @@ export default function RegisterScreen() {
   }
 
   return (
-    <View style={styles.wrap}>
+    <KeyboardScreen style={styles.wrap} contentContainerStyle={styles.content}>
       <Text style={styles.title}>Create account</Text>
       <TextInput style={styles.input} placeholder="Full name" value={fullName} onChangeText={setFullName} />
       <TextInput style={styles.input} placeholder="Mobile number" keyboardType="phone-pad" value={mobileNumber} onChangeText={setMobileNumber} />
@@ -34,12 +35,13 @@ export default function RegisterScreen() {
       <Pressable style={styles.button} onPress={submit} disabled={loading}>
         <Text style={styles.buttonText}>{loading ? "Creating…" : "Register"}</Text>
       </Pressable>
-    </View>
+    </KeyboardScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, padding: 24, justifyContent: "center", backgroundColor: colors.cream },
+  wrap: { flex: 1, backgroundColor: colors.cream },
+  content: { padding: 24, justifyContent: "center", flexGrow: 1 },
   title: { fontSize: 28, fontWeight: "800", color: colors.forest, marginBottom: 16 },
   input: { backgroundColor: colors.white, borderRadius: 12, padding: 14, marginBottom: 12 },
   button: { backgroundColor: colors.forest, borderRadius: 12, padding: 14, alignItems: "center" },

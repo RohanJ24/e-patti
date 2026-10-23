@@ -51,15 +51,23 @@ export default function SummaryPage() {
 
   const unit = summary.settlement.unit;
   const rate = summary.game.scoringConfig.pointsToMoneyRate;
+  const winner = summary.leaderboard.standings[0];
+  const completed = summary.game.status === "COMPLETED";
 
   return (
     <AppShell>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-4xl text-forest-900">Final game summary</h1>
+          <h1 className="font-display text-4xl text-forest-900">{completed ? "Game complete" : "Game summary"}</h1>
           <p className="text-slate-600">
-            {summary.game.name || summary.game.roomId} · {summary.validation.totalRounds} rounds
+            {summary.game.name || "Untitled game"} · {summary.game.roomId} · {summary.validation.totalRounds} rounds ·{" "}
+            {summary.game.players.length} players
           </p>
+          {winner ? (
+            <p className="mt-1 font-semibold text-forest-800">
+              Leader: {winner.playerName} ({signedPoints(winner.netPoints)})
+            </p>
+          ) : null}
         </div>
         <Button onClick={download} disabled={busy}>
           {busy ? "Generating PDF…" : "Download PDF"}
@@ -67,31 +75,7 @@ export default function SummaryPage() {
       </div>
 
       <section className="mt-8">
-        <h2 className="mb-3 font-display text-2xl text-forest-900">Round-by-round points</h2>
-        <div className="space-y-4">
-          {summary.game.rounds.length === 0 ? (
-            <Card>
-              <p className="text-sm text-slate-500">No rounds recorded yet.</p>
-            </Card>
-          ) : (
-            summary.game.rounds.map((round) => (
-              <Card key={round.id} className="p-0">
-                <div className="border-b border-cream-200 px-4 py-3">
-                  <h3 className="font-semibold text-forest-900">
-                    Round {round.roundNumber} · Winner {round.winnerName}
-                  </h3>
-                </div>
-                <RoundDetailTable round={round} players={summary.game.players} />
-              </Card>
-            ))
-          )}
-        </div>
-        <h3 className="mb-3 mt-6 font-display text-xl text-forest-900">All rounds overview</h3>
-        <AllRoundsMatrix game={summary.game} />
-      </section>
-
-      <section className="mt-8">
-        <h2 className="mb-3 font-display text-2xl text-forest-900">Overall player standings</h2>
+        <h2 className="mb-3 font-display text-2xl text-forest-900">Standings</h2>
         <Card className="overflow-x-auto p-0">
           <table className="min-w-full text-sm">
             <thead className="bg-forest-900 text-cream-50">
@@ -185,6 +169,30 @@ export default function SummaryPage() {
           Totals reconcile: {summary.validation.reconciles ? "Yes" : "No"} · Settlement{" "}
           {moneyOrPoints(summary.validation.totalSettlementAmount, unit)}
         </p>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-3 font-display text-2xl text-forest-900">Round details</h2>
+        <div className="space-y-4">
+          {summary.game.rounds.length === 0 ? (
+            <Card>
+              <p className="text-sm text-slate-500">No rounds recorded yet.</p>
+            </Card>
+          ) : (
+            summary.game.rounds.map((round) => (
+              <Card key={round.id} className="p-0">
+                <div className="border-b border-cream-200 px-4 py-3">
+                  <h3 className="font-semibold text-forest-900">
+                    Round {round.roundNumber} · Winner {round.winnerName}
+                  </h3>
+                </div>
+                <RoundDetailTable round={round} players={summary.game.players} />
+              </Card>
+            ))
+          )}
+        </div>
+        <h3 className="mb-3 mt-6 font-display text-xl text-forest-900">All rounds overview</h3>
+        <AllRoundsMatrix game={summary.game} />
       </section>
     </AppShell>
   );

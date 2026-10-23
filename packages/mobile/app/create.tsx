@@ -1,7 +1,8 @@
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
-import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { api } from "../lib/api";
+import { KeyboardScreen } from "../lib/keyboard";
 import { useHardwareBack } from "../lib/navigation";
 import { colors } from "../lib/theme";
 
@@ -57,7 +58,7 @@ export default function CreateGameScreen() {
   }
 
   return (
-    <ScrollView style={styles.wrap} contentContainerStyle={{ paddingBottom: 40 }}>
+    <KeyboardScreen style={styles.wrap} contentContainerStyle={styles.content}>
       <Text style={styles.label}>Game name</Text>
       <TextInput style={styles.input} value={name} onChangeText={setName} />
       <Text style={styles.label}>Room ID (optional)</Text>
@@ -85,12 +86,13 @@ export default function CreateGameScreen() {
       <Pressable style={styles.button} onPress={submit} disabled={saving}>
         <Text style={styles.buttonText}>{saving ? "Creating…" : "Review and create"}</Text>
       </Pressable>
-    </ScrollView>
+    </KeyboardScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, padding: 16, backgroundColor: colors.cream },
+  wrap: { flex: 1, backgroundColor: colors.cream },
+  content: { padding: 16, paddingBottom: 40 },
   label: { fontWeight: "700", color: colors.forest, marginBottom: 6 },
   input: { backgroundColor: colors.white, borderRadius: 12, padding: 12, marginBottom: 12 },
   button: { backgroundColor: colors.forest, borderRadius: 12, padding: 16, alignItems: "center", marginTop: 8 },

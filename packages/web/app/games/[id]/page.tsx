@@ -16,6 +16,7 @@ export default function GamePage() {
   const toast = useToast();
   const [game, setGame] = useState<Game | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [completeOpen, setCompleteOpen] = useState(false);
   const [roundToDelete, setRoundToDelete] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -37,6 +38,7 @@ export default function GamePage() {
     try {
       const result = await api.completeGame(params.id);
       setGame(result.game);
+      setCompleteOpen(false);
       router.push(`/games/${params.id}/summary`);
     } catch (error) {
       toast.push(error instanceof ApiError ? error.message : "Unable to complete the game", "error");
@@ -139,7 +141,7 @@ export default function GamePage() {
             </Link>
           ) : null}
           {!locked ? (
-            <Button onClick={complete} disabled={busy}>
+            <Button onClick={() => setCompleteOpen(true)} disabled={busy}>
               Complete game
             </Button>
           ) : (
@@ -228,6 +230,22 @@ export default function GamePage() {
         </section>
       </div>
 
+      <Modal open={completeOpen} title="Complete this game?" onClose={() => setCompleteOpen(false)}>
+        <p className="text-sm text-slate-600">
+          This finishes scoring for {game.name || game.roomId}. You can reopen later for corrections.
+        </p>
+        <p className="mt-2 text-sm text-slate-600">
+          After you confirm, you will see a short summary and can download the PDF.
+        </p>
+        <div className="mt-5 flex gap-3">
+          <Button onClick={complete} disabled={busy}>
+            {busy ? "Completing…" : "Confirm and complete"}
+          </Button>
+          <Button variant="ghost" onClick={() => setCompleteOpen(false)} disabled={busy}>
+            Cancel
+          </Button>
+        </div>
+      </Modal>
       <Modal open={deleteOpen} title="Delete this game room?" onClose={() => setDeleteOpen(false)}>
         <p className="text-sm text-slate-600">This permanently removes the room, rounds, and calculated scores.</p>
         <div className="mt-5 flex gap-3">

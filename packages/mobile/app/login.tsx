@@ -1,7 +1,8 @@
 import { Link, router } from "expo-router";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, TextInput } from "react-native";
 import { API_URL, api, setToken } from "../lib/api";
+import { KeyboardScreen } from "../lib/keyboard";
 import { colors } from "../lib/theme";
 
 export default function LoginScreen() {
@@ -23,7 +24,7 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={styles.wrap}>
+    <KeyboardScreen style={styles.wrap} contentContainerStyle={styles.content}>
       <Text style={styles.brand}>E-Patti</Text>
       <Text style={styles.title}>Log in</Text>
       <TextInput style={styles.input} placeholder="Mobile number" keyboardType="phone-pad" value={mobileNumber} onChangeText={setMobileNumber} />
@@ -35,12 +36,13 @@ export default function LoginScreen() {
         Create an account
       </Link>
       {__DEV__ ? <Text style={styles.hint}>{API_URL}</Text> : null}
-    </View>
+    </KeyboardScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, padding: 24, justifyContent: "center", backgroundColor: colors.cream },
+  wrap: { flex: 1, backgroundColor: colors.cream },
+  content: { padding: 24, justifyContent: "center", flexGrow: 1 },
   brand: { fontSize: 28, fontWeight: "800", color: colors.forest },
   title: { fontSize: 22, marginBottom: 16, color: colors.ink },
   input: { backgroundColor: colors.white, borderRadius: 12, padding: 14, marginBottom: 12 },

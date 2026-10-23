@@ -1,7 +1,8 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, TextInput } from "react-native";
 import { api, setToken } from "../../lib/api";
+import { KeyboardScreen } from "../../lib/keyboard";
 import { colors } from "../../lib/theme";
 
 export default function ProfileScreen() {
@@ -64,7 +65,7 @@ export default function ProfileScreen() {
   }
 
   return (
-    <ScrollView style={styles.wrap} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+    <KeyboardScreen style={styles.wrap} contentContainerStyle={styles.content}>
       <Text style={styles.name}>{name || "Profile"}</Text>
       <Text style={styles.meta}>{mobile}</Text>
 
@@ -104,7 +105,7 @@ export default function ProfileScreen() {
       <Pressable style={styles.ghost} onPress={logout}>
         <Text style={styles.ghostText}>Log out</Text>
       </Pressable>
-    </ScrollView>
+    </KeyboardScreen>
   );
 }
 

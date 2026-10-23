@@ -1,6 +1,7 @@
 import { router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
-import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardScreen } from "../../../lib/keyboard";
 import {
   calculateRoundScores,
   formatSignedPoints,
@@ -136,7 +137,7 @@ export default function RoundScreen() {
   const existing = editingId ? game.rounds.find((item) => item.id === editingId) : undefined;
 
   return (
-    <ScrollView style={styles.wrap} contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
+    <KeyboardScreen style={styles.wrap} contentContainerStyle={styles.content}>
       <Text style={styles.title}>
         {existing ? `Edit round ${existing.roundNumber}` : `Add round ${game.rounds.length + 1}`}
       </Text>
@@ -200,12 +201,13 @@ export default function RoundScreen() {
       <Pressable style={styles.button} onPress={save} disabled={!preview || saving}>
         <Text style={styles.buttonText}>{saving ? "Saving…" : existing ? "Save round" : "Submit round"}</Text>
       </Pressable>
-    </ScrollView>
+    </KeyboardScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, padding: 16, backgroundColor: colors.cream },
+  wrap: { flex: 1, backgroundColor: colors.cream },
+  content: { padding: 16, paddingBottom: 40 },
   title: { fontSize: 24, fontWeight: "800", color: colors.forest, marginBottom: 8 },
   help: { color: colors.muted, marginBottom: 16 },
   card: { backgroundColor: colors.white, borderRadius: 12, padding: 14, marginBottom: 10 },
