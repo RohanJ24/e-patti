@@ -5,10 +5,11 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { HeaderBack } from "../lib/navigation";
+import { HeaderBack, useNativeStackScreenOptions } from "../lib/navigation";
 import { colors } from "../lib/theme";
 
 export default function RootLayout() {
+  const headerOptions = useNativeStackScreenOptions();
   const [fontsLoaded] = useFonts({
     ...Ionicons.font
   });
@@ -26,10 +27,7 @@ export default function RootLayout() {
       <StatusBar style="light" />
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: colors.forest },
-          headerTintColor: colors.cream,
-          headerTitleStyle: { fontWeight: "700" },
-          contentStyle: { backgroundColor: colors.cream },
+          ...headerOptions,
           headerLeft: () => <HeaderBack />,
           headerBackVisible: false
         }}

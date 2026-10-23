@@ -1,17 +1,14 @@
 import { Stack } from "expo-router";
-import { HeaderBack, useHardwareBack } from "../../../lib/navigation";
-import { colors } from "../../../lib/theme";
+import { HeaderBack, useHardwareBack, useNativeStackScreenOptions } from "../../../lib/navigation";
 
 export default function GameLayout() {
   useHardwareBack("/(app)/games");
+  const headerOptions = useNativeStackScreenOptions();
 
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: colors.forest },
-        headerTintColor: colors.cream,
-        headerTitleStyle: { fontWeight: "700" },
-        contentStyle: { backgroundColor: colors.cream },
+        ...headerOptions,
         headerLeft: () => <HeaderBack fallback="/(app)/games" />,
         headerBackVisible: false
       }}

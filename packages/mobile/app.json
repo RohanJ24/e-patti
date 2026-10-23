@@ -11,6 +11,11 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.epatti.app"
     },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#0B3D2E",
+      "translucent": true
+    },
     "android": {
       "package": "com.epatti.app",
       "usesCleartextTraffic": true,
