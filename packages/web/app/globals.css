@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-cream-50 text-ink font-sans antialiased;
+}
+
+.table-wrap {
+  @apply overflow-x-auto rounded-xl border border-cream-200 bg-white;
+}
+
+.score-pos {
+  @apply font-semibold text-emerald-700;
+}
+
+.score-neg {
+  @apply font-semibold text-rose-700;
+}

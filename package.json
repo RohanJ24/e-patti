@@ -1,0 +1,28 @@
+{
+  "name": "e-patti",
+  "version": "1.0.0",
+  "private": true,
+  "description": "E-Patti — Teen Patti score tracking and settlement calculation",
+  "workspaces": [
+    "packages/shared",
+    "packages/backend",
+    "packages/web"
+  ],
+  "scripts": {
+    "build": "npm run build -w @e-patti/shared && npm run build -w @e-patti/backend && npm run build -w @e-patti/web",
+    "build:shared": "npm run build -w @e-patti/shared",
+    "dev": "npm run build:shared && concurrently -n shared,api,web -c magenta,green,cyan \"npm run dev -w @e-patti/shared\" \"npm run dev -w @e-patti/backend\" \"npm run dev -w @e-patti/web\"",
+    "dev:api": "npm run dev -w @e-patti/backend",
+    "dev:web": "npm run dev -w @e-patti/web",
+    "dev:mobile": "npm start --prefix packages/mobile",
+    "start": "npm run start -w @e-patti/backend",
+    "test": "npm run test -w @e-patti/shared && npm run test -w @e-patti/backend",
+    "lint": "npm run lint -w @e-patti/web"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "E-Patti",
+    "slug": "e-patti",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "epatti",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.epatti.app"
+    },
+    "android": {
+      "package": "com.epatti.app",
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "backgroundColor": "#0B3D2E"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-asset",
+      "expo-font"
+    ],
+    "extra": {
+      "apiUrl": "http://localhost:4000/api"
+    }
+  }
+}
